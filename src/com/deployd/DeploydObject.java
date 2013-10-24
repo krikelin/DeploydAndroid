@@ -43,7 +43,10 @@ public class DeploydObject extends JSONObject {
 	@Override
 	public JSONObject put(String key, Object val) throws JSONException {
 		if(val instanceof DeploydObject) {
-			String id = "";
+			String id = ((DeploydObject) val).getString("id");
+			if(id == null) {
+				id = ""; // TODO: Assign custom ID
+			}
 			this.junctions.put(id, (DeploydObject)val);
 			return (JSONObject)val;
 		} else {
@@ -106,6 +109,7 @@ public class DeploydObject extends JSONObject {
 					if(DeploydObject.this.has("id")) {
 						result = Deployd.put(params[0], "/" + resource + "/" + DeploydObject.this.getString("id"));
 						
+						// TODO: add code for handling junctions
 						
 					} else {
 						result = Deployd.post(params[0], "/" + resource);
@@ -131,6 +135,7 @@ public class DeploydObject extends JSONObject {
 					if(onCreated != null) {
 						try {
 							DeploydObject.this.put("id", result.getString("id"));
+							
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
